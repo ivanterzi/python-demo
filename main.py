@@ -11,5 +11,3 @@ def view():
         media_type="application/jason",)
 
 
-
-
