@@ -1,13 +1,21 @@
-FROM python:3.9
+#Для запуска контейнера
+#docker build -t hw-img-rep .
 
-WORKDIR /code
+#Для запуска приложения
+#docker run -p 8000:8000 -t hw-img-rep
 
-COPY ./requirements.txt /code/requirements.txt
+FROM python:3.9-buster
 
-RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
+
+
+WORKDIR /app
+
+COPY requirements.txt /app/requirements.txt
+
+RUN pip install --no-cache-dir --upgrade -r /app/requirements.txt
 
 EXPOSE 8000
 
-COPY ./main.py /code/
+COPY app /app
 
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]

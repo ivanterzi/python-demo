@@ -1,12 +1,7 @@
 import json
-from fastapi import FastAPI, Response
+from fastapi import FastAPI
 
 app = FastAPI()
-
-@app.get("/")
-def read_root():
-    return {"Hello": "World"}
-
 
 @app.get('/ping/')
 def view():
