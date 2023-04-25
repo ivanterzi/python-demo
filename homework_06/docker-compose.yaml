@@ -1,0 +1,48 @@
+# Use postgres/example user/password credentials
+version: "3"
+
+services:
+  app: &app-config
+    build:
+      dockerfile: ./dockerfile
+      context: ./
+    environment:
+      SQLALCHEMY_DATABASE_URI: postgresql+psycopg2://username:passwd!@pg:5432/blog
+      CONFIG_NAME: ProductionConfig
+
+
+    ports:
+      - "1080:80"
+
+  app-dev:
+   <<: *app-config
+   environment:
+     SQLALCHEMY_DATABASE_URI: postgresql+psycopg2://username:passwd!@pg:5432/blog
+     CONFIG_NAME: DevelopmentConfig
+   command:
+     - 'python'
+     - 'models.py'
+
+   ports:
+     - "5080:80"
+   volumes:
+     - ./app:/app
+  pg:
+    image: postgres
+    environment:
+      POSTGRES_DB: blog
+      POSTGRES_USER: username
+      POSTGRES_PASSWORD: passwd!
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "5432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data/pgdata
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - '8080:8080'
+volumes:
+  db-data:
